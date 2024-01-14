@@ -6,6 +6,8 @@ import (
 	"log"
 
 	"github.com/DuongWuangDat/to-do-app-api/database"
+	"github.com/DuongWuangDat/to-do-app-api/routes"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -27,4 +29,12 @@ func main() {
 	}
 	fmt.Println("Database ping successfully")
 	database.Collection = client.Database(database.DBName).Collection(database.ColName)
+	fmt.Println("Connection instance is prepared successfully")
+	r := gin.Default()
+	r.GET("/tasks", routes.GetAllTask)
+	r.GET("/tasks/:id", routes.GetOneTask)
+	r.POST("/tasks", routes.AddNewTask)
+	r.PUT("/tasks/:id", routes.UpdateTask)
+	r.DELETE("/tasks/:id", routes.DeleteTask)
+	r.Run(":8080")
 }
